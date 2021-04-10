@@ -13,9 +13,10 @@
     <div class="days">
          <#list day as day>
              <div class="number">
-                 ${day.number}
-             </div>
+                 <a href="http://localhost:9889/day"> ${day.number}</a>
+                 ${day.tasks}
          </#list>
+        </div>
     </div>
 </ul>
 

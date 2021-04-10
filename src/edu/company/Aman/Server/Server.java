@@ -21,6 +21,8 @@ public class Server extends BasicServer {
     public Server(String host, int port) throws IOException {
         super(host, port);
         registerGet("/", this::freemarkerMainHandler);
+//        registerGet("/day", this::freemarkerDayHandler);
+
     }
 
     private void freemarkerMainHandler(HttpExchange exchange) {
@@ -43,7 +45,7 @@ public class Server extends BasicServer {
     }
     protected void renderTemplate(HttpExchange exchange, String templateFile,Object dataModel) {
         try {
-            Template temp = freemarker.getTemplate(templateFile);
+            Template temp = freemarker.getTemplate("calendar.ftl");
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             try (OutputStreamWriter writer = new OutputStreamWriter(stream)) {
                 temp.process(dataModel, writer);
@@ -57,6 +59,10 @@ public class Server extends BasicServer {
     }
 
     private DataModel getDataModel() {
-        return new DataModel();
-    }
+        return new DataModel();}
+
+//    private Day getDayModel() {
+//        return new Day();
+//    }
+
 }
