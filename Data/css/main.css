@@ -1,0 +1,13 @@
+.h1{
+    display: flex;
+}
+.days{
+    display: block;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+.number{
+    margin-top: 100px;
+
+}
