@@ -1,14 +1,27 @@
 package edu.company.Aman.Server;
 
+import edu.company.Aman.Generator;
+
+import java.util.Random;
+
 public class Task {
         private String name;
         private String description;
-        private String category;
+        private Category category;
 
-        public Task( String name,String description){
-           ;
-            this.description = description;
-            this.name = name;
+        public Task(){
+            this.description = Generator.makeDescription();
+            this.name = Generator.makeName();
+            Random r = new Random();
+            int a = r.nextInt(1)+3;
+            switch (a) {
+                case 1 -> this.category = Category.WORK;
+                case 2 -> this.category = Category.ORDINARY;
+                case 3 -> this.category = Category.SHOPPING;
+            }
+        }
+        public void makeCategory(){
+
         }
         public String getName() {
             return name;
@@ -26,13 +39,6 @@ public class Task {
             this.description = description;
         }
 
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
         public String toString (){
             String n = "";
             n =  String.format("%s | %s | %s", this.name, this.description, this.category);

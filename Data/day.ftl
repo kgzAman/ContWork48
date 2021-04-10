@@ -12,7 +12,7 @@
     <div class="task">
         <#list tasks as task>
             <div class="number">
-<#--                ${task.img}-->
+
                 ${task.category}
                 ${task.description}
             </div>
