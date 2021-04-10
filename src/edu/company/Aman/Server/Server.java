@@ -22,20 +22,15 @@ public class Server extends BasicServer {
 
     public Server(String host, int port) throws IOException {
         super(host, port);
-        registerGet("/days", this::freemarkerMainHandler);
+        registerGet("/days", this::handleQueryRequest);
         registerGet("/", this::GetDayHolder);
 
-    }
-    private void freemarkerMainHandler(HttpExchange httpExchange) {
-        renderTemplate(httpExchange,"calendar.ftl",getCalendarDataModel((TaskForDay(makeDays(),eventsImg()))));
     }
     private void GetDayHolder(HttpExchange httpExchange) {
         renderTemplate(httpExchange,"main.ftl",getCalendarDataModel((TaskForDay(makeDays(),eventsImg()))));
     }
 
-//    private void freemarkerDayHandler(HttpExchange exchange) {
-//        renderTemplate(exchange,"calendar.ftl",new Day());
-//    }
+
 
     private static Configuration initFreeMarker() {
         try {
@@ -62,7 +57,7 @@ public class Server extends BasicServer {
         if (byDay.getNumber() == -1) {
             redirect303(httpExchange, "/error");
         } else {
-            renderTemplate(httpExchange, "page.ftl", byDay);
+            renderTemplate(httpExchange, "calendar.ftl", byDay);
         }
     }
 

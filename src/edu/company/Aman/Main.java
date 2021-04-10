@@ -8,8 +8,6 @@ import java.lang.reflect.Array;
 public class Main {
 
     public static void main(String[] args) {
-//        DataModel dataModel = new DataModel();
-//        System.out.println(dataModel.getDay().toString());
         try {
             new Server("localhost", 9889).start();
         } catch (IOException e) {
