@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import edu.company.Aman.BasicServer.BasicServer;
 import edu.company.Aman.BasicServer.ContentType;
 import edu.company.Aman.BasicServer.ResponseCodes;
+import edu.company.Aman.Generator;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -13,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.*;
 
 
 public class Server extends BasicServer {
@@ -24,10 +26,13 @@ public class Server extends BasicServer {
 //        registerGet("/day", this::freemarkerDayHandler);
 
     }
-
-    private void freemarkerMainHandler(HttpExchange exchange) {
-        renderTemplate(exchange,"calendar.ftl",getDataModel());
+    private void freemarkerMainHandler(HttpExchange httpExchange) {
+        renderTemplate(httpExchange,"calendar.ftl",getCalendarDataModel((TaskForDay(makeDays(),eventsImg()))));
     }
+
+//    private void freemarkerDayHandler(HttpExchange exchange) {
+//        renderTemplate(exchange,"calendar.ftl",new Day());
+//    }
 
     private static Configuration initFreeMarker() {
         try {
@@ -43,9 +48,59 @@ public class Server extends BasicServer {
             throw new RuntimeException(e);
         }
     }
+    private void handleQueryRequest(HttpExchange httpExchange) {
+        String queryParams = getQueryParams(httpExchange);
+        Map<String, String> params = Utils.parseUrlEncoded(queryParams, "&");
+        int day = 0;
+        for (Map.Entry<String, String> k : params.entrySet()) {
+            day = Integer.parseInt(k.getValue());
+        }
+        Day byDay = CalendarDataModel.findByDay(day);
+        if (byDay.getNumber() == -1) {
+            redirect303(httpExchange, "/error");
+        } else {
+            renderTemplate(httpExchange, "page.ftl", byDay);
+        }
+    }
+
+    public static List<Task> eventsImg(){
+        List<Task> events = new ArrayList<>();
+        events.add(new Task(Generator.makeName(), "/images/gen.png", Generator.makeDescription(), Category.SHOPPING));
+        events.add(new Task(Generator.makeName(), "/images/urgent.png", Generator.makeDescription(), Category.ORDINARY));
+        events.add(new Task(Generator.makeName(), "/images/work.png", Generator.makeDescription(), Category.WORK));
+        events.add(new Task(Generator.makeName(), "/images/shop.png", Generator.makeDescription(), Category.PURCHASES));
+        events.add(new Task(Generator.makeName(), "/images/oth.png", Generator.makeDescription(), Category.OTHER));
+        return events;
+    }
+
+    public static List<Day> makeDays(){
+        List<Day> day = new ArrayList<>();
+        for (int i = 1; i < 31; i++) {
+            day.add(new Day(i));
+        }
+        return day;
+    }
+
+    public static List<Day> TaskForDay(List<Day> days, List<Task> events){
+        Random rnd = new Random();
+        for (Day day: days) {
+            int num = rnd.nextInt(5) + 1;
+            for (int i = 0; i < num; i++) {
+                int cases = rnd.nextInt(events.size());
+                day.getTasks().add(events.get(cases));
+            }
+        }
+        return days;
+    }
+
+    private String getQueryParams(HttpExchange exchange) {
+        String query = exchange.getRequestURI().getQuery();
+        return Objects.nonNull(query) ? query : "";
+    }
+
     protected void renderTemplate(HttpExchange exchange, String templateFile,Object dataModel) {
         try {
-            Template temp = freemarker.getTemplate("calendar.ftl");
+            Template temp = freemarker.getTemplate(templateFile);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             try (OutputStreamWriter writer = new OutputStreamWriter(stream)) {
                 temp.process(dataModel, writer);
@@ -57,12 +112,18 @@ public class Server extends BasicServer {
             e.printStackTrace();
         }
     }
+    protected void redirect303(HttpExchange exchange, String path) {
+        try {
+            exchange.getResponseHeaders().add("Location", path);
+            exchange.sendResponseHeaders(303, 0);
+            exchange.getResponseBody().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private DataModel getDataModel() {
-        return new DataModel();}
+    private CalendarDataModel getCalendarDataModel(List<Day> dayList) {
+        return new CalendarDataModel(dayList);}
 
-//    private Day getDayModel() {
-//        return new Day();
-//    }
 
 }

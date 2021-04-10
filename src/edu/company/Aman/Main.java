@@ -1,6 +1,5 @@
 package edu.company.Aman;
 
-import edu.company.Aman.Server.DataModel;
 import edu.company.Aman.Server.Server;
 
 import java.io.IOException;

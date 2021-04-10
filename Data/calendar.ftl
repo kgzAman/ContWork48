@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Login form</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="index.css">
+    <link href="css/freemarker.css" rel="stylesheet">
+    <title>Calendar</title>
 </head>
-
 <body>
-<ul>
-    <h1>Планировщик задач на Апрель</h1>
-    <div class="days">
-         <#list day as day>
-             <div class="number">
-                 <a href="http://localhost:9889/day"> ${day.number}</a>
-<#--                 ${day.tasks}-->
-         </#list>
+<a href="/">Назад к календарю</a>
+<h1>Задачи на Август </h1>
+<div class="table flex flex-col">
+    <div class="header flex">
+        <div class="column">
+            Тип
+        </div>
+        <div class="column">
+            Название
+        </div>
+        <div class="column">
+            Описание
+        </div>
+        <div class="column">
+            Действие
         </div>
     </div>
-</ul>
 
-</ul>
+    <#list days as day>
+        <#list day.tasks as task>
+            <div class="row ${day?item_parity} flex">
+                <div class="column">
+                    <img src="${task.img}" width="50" height="50">
+                </div>
+                <div class="column">
+                    ${task.name}
+                </div>
+                <div class="column">
+                    ${task.description}
+                </div>
+                <div class="column">
+                    <a href="/delete?date=${day}&event=${task.name}" class="link">Удалить задачу</a>
+                </div>
+            </div>
+        </#list>
+    </#list>
 </body>
-
 </html>

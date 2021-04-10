@@ -10,7 +10,7 @@
 <body>
 <ul>
     <div class="task">
-        <#list tasks as task>
+        <#list task as task>
             <div class="number">
 
                 ${task.category}

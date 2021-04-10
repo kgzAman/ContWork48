@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Login form</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="index.css">
+    <title>Calendar</title>
 </head>
-
 <body>
-<main>
-        <h1 class="h1"> Планировщик задач на Апрель </h1>
-        <div class="days">
-            <p class="Mon">Понедельние</p>
-            <p class="Tues">Вторник </p>
-            <p class="Wen">Среда</p>
-            <p class="Thur">Четверг </p>
-            <p class="Fri">Пятница</p>
-            <p class="Sut">Суббота</p>
-            <p class="Sun">Воскресенье</p>
-        </div>
-</main>
-</body>
 
+<div class="main-content">
+    <div class="month month--feb" style="--color: #d5c6c6">Апрель</div>
+    <#list days as day>
+    <div class="date borders" style="--color:#f5f1f1">
+        <a href="/page" id="${day.day}">
+            ${day.day}
+            <p>
+                <#list day.events as event>
+                <img src="${event.img}" width="20" height="20">
+            </#list>
+            </p>
+        </a>
+    </div>
+</#list>
+</div>
+</body>
 </html>
