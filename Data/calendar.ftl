@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
     <link href="css/freemarker.css" rel="stylesheet">
     <title>Calendar</title>
 </head>
 <body>
 <a href="/">Назад к календарю</a>
-<h1>Задачи на Август </h1>
+<h1>Задачи на Апрель </h1>
 <div class="table flex flex-col">
     <div class="header flex">
         <div class="column">
